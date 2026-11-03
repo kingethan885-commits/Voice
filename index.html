@@ -2,53 +2,180 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>2021 Voice Assistant</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice - Assistant</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; background: #f4f4f9; }
-        button { padding: 15px 30px; font-size: 18px; cursor: pointer; border-radius: 5px; border: none; background: #4CAF50; color: white; }
+        /* Import Google Sans / Product Sans alternative fonts */
+        @import url('https://googleapis.com');
+        
+        * {
+            box-sizing: border-box;
+            font-family: 'Product Sans', 'Google Sans', 'Inter', -apple-system, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #ffffff;
+            color: #000000;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            padding: 40px;
+            justify-content: space-between;
+        }
+
+        /* Top Header Styling */
+        .header-title {
+            font-size: 28px;
+            font-weight: 400;
+            text-align: left;
+            letter-spacing: -0.5px;
+        }
+
+        /* Center Layout Container */
+        .center-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 600px;
+            margin: auto;
+        }
+
+        .prompt-text {
+            font-size: 26px;
+            font-weight: 400;
+            margin-bottom: 25px;
+            color: #000000;
+        }
+
+        /* Input Box with Arrow Vector Container */
+        .input-wrapper {
+            position: relative;
+            width: 100%;
+            margin-bottom: 30px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px 60px 14px 20px;
+            font-size: 16px;
+            border-radius: 30px; /* Gives the classic pill layout */
+            border: none;
+            background-color: #f1f3f4; /* Light gray pill color */
+            color: #000000;
+            outline: none;
+        }
+
+        /* Rounded Submit Arrow button inside input bar */
+        .submit-btn {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 1px solid #ccc;
+            background-color: #ffffff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #5f6368;
+            font-size: 18px;
+            transition: background 0.2s;
+        }
+
+        .submit-btn:hover {
+            background-color: #f8f9fa;
+        }
+
+        /* Bottom Dynamic Output Box placement */
+        .response-text {
+            font-size: 24px;
+            font-weight: 400;
+            color: #000000;
+            text-align: center;
+            margin-top: 10px;
+            min-height: 35px;
+        }
+
+        /* Bottom Footer Notice placement */
+        .footer-notice {
+            font-size: 14px;
+            color: #000000;
+            text-align: left;
+            font-weight: 400;
+        }
     </style>
 </head>
 <body>
 
-    <h1>2021 Style Assistant</h1>
-    <p>Type your command below:</p>
-    <input type="text" id="userInput" placeholder="Ask something..." style="width: 300px; padding: 10px; font-size: 16px;">
-    <button onclick="askAssistant()">Submit</button>
-    <h3 id="output" style="margin-top: 30px; color: #333;"></h3>
+    <!-- Top Left Title -->
+    <div class="header-title">Welcome To Voice</div>
+
+    <!-- Center Content Block -->
+    <div class="center-container">
+        <div class="prompt-text">What’s Next?</div>
+        
+        <div class="input-wrapper">
+            <input type="text" id="userInput" placeholder="Ask Voice something..." onkeydown="if(event.key === 'Enter') askAssistant()">
+            <button class="submit-btn" onclick="askAssistant()">↑</button>
+        </div>
+
+        <div class="response-text" id="output">Assistant’s Response Here</div>
+    </div>
+
+    <!-- Bottom Left Footer -->
+    <div class="footer-notice">Not Made By Google!</div>
 
     <script>
         const responses = {
             "hours": "Regular hours of operation are Monday through Friday, 9:00 AM to 4:00 PM.",
-            "special": "Special holiday hours will be active for November 11, closing for the day.",
-            "businesses": "The currently available businesses are Snack House, Aiden G's Mini Store Of Trinkets and Grant's Prints
+            "special": "Special holiday hours will be active for Thanksgiving, closing early at 1:00 PM.",
+            "businesses": "The currently available businesses are Snack House, Aiden G's Mini Store Of Trinkets and Grant's Prints.",
             "update": "The next update will be Beta 1.4.",
-            "features": "Future updates will add dark mode support and revamps to DeliveryDash."
+            "features": "Future updates will add dark mode support."
         };
 
-        function askAssistant() {
-            const input = document.getElementById("userInput").value.toLowerCase();
+        function processCommand(text) {
+            const input = text.toLowerCase().trim();
             const outputText = document.getElementById("output");
-            let reply = "I'm sorry, I don't understand that command.";
+            let reply = "I am Voice, your digital assistant. I didn't quite catch that command.";
 
-            // Simple, fast 2021-style keyword matching routing
-            if (input.includes("hours of operation") || input.includes("time do you open")) {
+            if (input.includes("hours") && (input.includes("operation") || input.includes("regular") || input.includes("current"))) {
                 reply = responses.hours;
-            } else if (input.includes("special hours") || input.includes("holiday")) {
+            } else if (input.includes("open") || input.includes("time")) {
+                reply = responses.hours;
+            } else if (input.includes("special") || input.includes("holiday")) {
                 reply = responses.special;
-            } else if (input.includes("available businesses") || input.includes("stores")) {
+            } else if (input.includes("business") || input.includes("store") || input.includes("available")) {
                 reply = responses.businesses;
-            } else if (input.includes("update number") || input.includes("next version")) {
+            } else if (input.includes("update") || input.includes("version")) {
                 reply = responses.update;
-            } else if (input.includes("new features") || input.includes("future updates")) {
+            } else if (input.includes("feature") || input.includes("patch") || input.includes("roadmap")) {
                 reply = responses.features;
+            } else if (input.includes("name") || input.includes("who are you")) {
+                reply = "My name is Voice, your personal assistant.";
             }
 
-            // Display text on website
+            // Update text on the clean interface
             outputText.innerText = reply;
 
-            // Free Browser-Native Text-to-Speech
+            // Trigger Browser Voice Speech
+            window.speechSynthesis.cancel();
             const utterance = new SpeechSynthesisUtterance(reply);
             window.speechSynthesis.speak(utterance);
+        }
+
+        function askAssistant() {
+            const inputField = document.getElementById("userInput");
+            if (inputField.value.trim() !== "") {
+                processCommand(inputField.value);
+                inputField.value = ""; // Clears the input bar after submitting
+            }
         }
     </script>
 </body>
