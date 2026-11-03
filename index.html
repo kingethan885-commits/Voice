@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>2021 Voice Assistant</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; background: #f4f4f9; }
+        button { padding: 15px 30px; font-size: 18px; cursor: pointer; border-radius: 5px; border: none; background: #4CAF50; color: white; }
+    </style>
+</head>
+<body>
+
+    <h1>2021 Style Assistant</h1>
+    <p>Type your command below:</p>
+    <input type="text" id="userInput" placeholder="Ask something..." style="width: 300px; padding: 10px; font-size: 16px;">
+    <button onclick="askAssistant()">Submit</button>
+    <h3 id="output" style="margin-top: 30px; color: #333;"></h3>
+
+    <script>
+        const responses = {
+            "hours": "Regular hours of operation are Monday through Friday, 9:00 AM to 4:00 PM.",
+            "special": "Special holiday hours will be active for November 11, closing for the day.",
+            "businesses": "The currently available businesses are Snack House, Aiden G's Mini Store Of Trinkets and Grant's Prints
+            "update": "The next update will be Beta 1.4.",
+            "features": "Future updates will add dark mode support and revamps to DeliveryDash."
+        };
+
+        function askAssistant() {
+            const input = document.getElementById("userInput").value.toLowerCase();
+            const outputText = document.getElementById("output");
+            let reply = "I'm sorry, I don't understand that command.";
+
+            // Simple, fast 2021-style keyword matching routing
+            if (input.includes("hours of operation") || input.includes("time do you open")) {
+                reply = responses.hours;
+            } else if (input.includes("special hours") || input.includes("holiday")) {
+                reply = responses.special;
+            } else if (input.includes("available businesses") || input.includes("stores")) {
+                reply = responses.businesses;
+            } else if (input.includes("update number") || input.includes("next version")) {
+                reply = responses.update;
+            } else if (input.includes("new features") || input.includes("future updates")) {
+                reply = responses.features;
+            }
+
+            // Display text on website
+            outputText.innerText = reply;
+
+            // Free Browser-Native Text-to-Speech
+            const utterance = new SpeechSynthesisUtterance(reply);
+            window.speechSynthesis.speak(utterance);
+        }
+    </script>
+</body>
+</html>
